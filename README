@@ -1,0 +1,6 @@
+Just a rudimentary site using next.js, express, apollo  and vivo-discovery graphql api
+
+
+# Running: just need node installed in some manner
+
+> node server.js 
