@@ -15,8 +15,8 @@ app.prepare()
     return app.render(req, res, '/people', req.query)
   })
 
-  server.get('/person/:id', (req, res) => {
-    return app.render(req, res, '/person', { id: req.params.id })
+  server.get('/:type/:id', (req, res) => {
+    return app.render(req, res, '/'+req.params.type, { id: req.params.id })
   })
 
   server.get('*', (req, res) => {
