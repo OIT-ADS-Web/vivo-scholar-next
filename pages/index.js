@@ -1,8 +1,8 @@
 import App from '../components/App'
-import withData from '../lib/apollo'
 
-export default withData(props => (
+const Home = () => (
   <App>
-    <h1>Hello</h1>
+    <h1>Home</h1>
   </App>
-))
+)
+export default Home

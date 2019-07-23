@@ -30,6 +30,7 @@ const Person = ({ url: { pathname }, data: { loading, error, person } }) => {
 
     return (
       <App>
+        <h1>{ person.name }</h1>
         <div className="row">
             <div className="col-sm"> 
                 <section className="image">
@@ -39,7 +40,7 @@ const Person = ({ url: { pathname }, data: { loading, error, person } }) => {
                 </section>
             </div>
             <div className="col-sm">  
-              <h2>{ person.name }</h2>
+              <h2>{ person.primaryEmail }</h2>
             </div>
             <div className="col-sm"> 
                { positions }
@@ -70,6 +71,7 @@ query personDetails($id: String!) {
     image
     name
     keywords
+    primaryEmail
     positions {
       type
     }

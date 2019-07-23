@@ -1,11 +1,7 @@
 {
   "presets": ["next/babel"],
-  "env": {
-    "production": {
-      "plugins": ["emotion"]
-    },
-    "development": {
-      "plugins": [["emotion", { "sourceMap": true }]]
-    }
-  }
+  "plugins": [
+    "@babel/syntax-dynamic-import",
+    "@babel/syntax-object-rest-spread"
+  ]
 }

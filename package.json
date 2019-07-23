@@ -9,10 +9,6 @@
     "start": "NODE_ENV=production node server.js"
   },
   "author": "Rob Nelson",
-  "devDependencies": {
-    "babel-plugin-emotion": "^10.0.7",
-    "prettier": "^1.16.4"
-  },
   "dependencies": {
     "apollo-client-preset": "^1.0.8",
     "express": "^4.17.1",

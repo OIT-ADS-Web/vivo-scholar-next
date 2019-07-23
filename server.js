@@ -3,7 +3,7 @@ const next = require('next')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3003
 
 app.prepare()
 .then(() => {
@@ -11,8 +11,8 @@ app.prepare()
 
   server.use('/static', express.static('static'))
 
-  server.get('/people', (req, res) => {
-    return app.render(req, res, '/people', req.query)
+  server.get('/:collection', (req, res) => {
+    return app.render(req, res, '/'+req.params.collection, req.query)
   })
 
   server.get('/:type/:id', (req, res) => {
