@@ -11,6 +11,10 @@ app.prepare()
 
   server.use('/static', express.static('static'))
 
+  server.get('/search/:type', (req, res) => {
+    return app.render(req, res, '/search/'+req.params.type, req.query)
+  })
+
   server.get('/:collection', (req, res) => {
     return app.render(req, res, '/'+req.params.collection, req.query)
   })
@@ -18,6 +22,7 @@ app.prepare()
   server.get('/:type/:id', (req, res) => {
     return app.render(req, res, '/'+req.params.type, { id: req.params.id })
   })
+
 
   server.get('*', (req, res) => {
     return app.render(req, res, '/', req.query)
