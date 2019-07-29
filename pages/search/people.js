@@ -1,6 +1,7 @@
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import App from '../../components/App'
+import Paging from '../../components/Paging'
 import withData from '../../lib/apollo'
 import _ from 'lodash'
 
@@ -36,15 +37,13 @@ const PersonList = ({
         </form>
 
         <h3>page {personsFacetedSearch.page.number+1} of {personsFacetedSearch.page.totalPages} pages</h3>
-        <ul className="pagination">
-          { pages }
-        </ul>
-        <ul>
+        <Paging page={personsFacetedSearch.page}></Paging>
+        <ul className="list-group">
           {personsFacetedSearch.content.map((person, index) => (
-            <li key={person.id}>
-                <div>
+            <li className="list-group-item" key={person.id}>
+                <span className="person-name">
                   <a href={"/person/"+person.id}>{person.name}</a>
-                </div>
+                </span>
               </li>
           ))}
         </ul>
