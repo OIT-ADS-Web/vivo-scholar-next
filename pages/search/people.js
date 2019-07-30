@@ -17,6 +17,12 @@ const PersonList = ({
        console.log(`page=${page}`)
     }
 
+    let onFacet = () => {
+      console.log("should reload page")
+      // this seems to work ??
+      searchForm.submit()
+    }
+
     console.log(filters)
     if (error) return <h1>Error loading people.</h1>
     if (personsFacetedSearch) {
@@ -25,7 +31,7 @@ const PersonList = ({
       <App>
         <div>
         
-        <form action="/search/people" method="GET">
+        <form id="searchForm" action="/search/people" method="GET">
         
           <h2>People</h2>
           <div>Query: { search }</div>
@@ -65,6 +71,7 @@ const PersonList = ({
                      <li className="list-group-item" 
                        key={`lgi-${facet.field}+${e.value}`}>
                         <input
+                          onChange={onFacet}
                           defaultChecked={!!_.includes(filters[facet.field], e.value)} 
                           type="checkbox" 
                           name={`filters[${facet.field}]`}
