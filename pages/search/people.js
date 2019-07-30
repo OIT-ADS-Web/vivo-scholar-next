@@ -5,21 +5,25 @@ import Paging from '../../components/Paging'
 import withData from '../../lib/apollo'
 import _ from 'lodash'
 
+// how to read this ...
+// filters[keywords]=Informatics&filters[keywords]=biostatistics
+// read like this:
+// { keywords: [ 'Informatics', 'biostatistics' ] }
 const PersonList = ({ 
-    url: { pathname, query: { search, pageNumber } }, 
+    url: { pathname, query: { search, pageNumber, filters } }, 
     data: { loading, error, personsFacetedSearch } }) => {
 
     let cb = (page) => {
        console.log(`page=${page}`)
     }
 
+    console.log(filters)
     if (error) return <h1>Error loading people.</h1>
     if (personsFacetedSearch) {
 
     return (
       <App>
-      <div>
-        
+        <div>
         
         <form action="/search/people" method="GET">
         
@@ -27,8 +31,8 @@ const PersonList = ({
           <div>Query: { search }</div>
 
           <div className="form-group">
-            <label for="search">Search:</label>
-            <input defaultValue={ search } type="text" className="form-control" key="search" name="search" placeholder="search..." ref={ search } />
+            <label htmlFor="search">Search:</label>
+            <input defaultValue={ search } type="text" className="form-control" key="search" name="search" placeholder="search..." />
           </div>
         
 
@@ -37,28 +41,31 @@ const PersonList = ({
         
         <div className="row" key={`form-search-row`}>
         
-        <div className="col-sm"> 
+        <div className="col-sm" key={`form-search-col1`}> 
           <ul className="list-group">
             {personsFacetedSearch.content.map((person, index) => (
               <li className="list-group-item" key={person.id}>
                   <span className="person-name">
                     <a href={"/person/"+person.id}>{person.name}</a>
                   </span>
-                </li>
+              </li>
             ))}
           </ul>
         </div>
 
-        <div className="col-sm">
+        <div className="col-sm" key={`form-search-col2`}>
         {personsFacetedSearch.facets.map((facet, index) => (
-            <div>
+            /* NOTE: needed a key here */
+            <div key={`div-${facet.field}`}>
                 <h3>{ facet.field }</h3>
-                <ul className="list-group" key={facet.field}>
+                
+                <ul className="list-group">
                     {facet.entries.content.map((e, index2) => (
                                         
-                     <li className="list-group-item" key={`lgi-${index2}_${facet.field}`}>
+                     <li className="list-group-item" 
+                       key={`lgi-${facet.field}+${e.value}`}>
                         <input
-                          defaultChecked={!!facet.value==e.value} 
+                          defaultChecked={!!_.includes(filters[facet.field], e.value)} 
                           type="checkbox" 
                           name={`filters[${facet.field}]`}
                           value={e.value} />

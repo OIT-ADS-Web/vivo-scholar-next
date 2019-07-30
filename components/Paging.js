@@ -53,11 +53,13 @@ const PagingPanel = ({page: {totalPages, number, size, totalElements}, callback}
       if(x[0] == '+') {
         let pageNumber = x[1]
 
-        let desc = (<a className="page-link" href={"?pageNumber="+(pageNumber -1)}>
+        let desc = (
+           <a className="page-link" href={"?pageNumber="+(pageNumber -1)}>
               <span aria-hidden="true">&laquo;</span> Previous
             </a>)
         if (direction == 'forward') {
-          desc = (<a className="page-link" href={"?pageNumber="+(pageNumber -1)}>Next <span aria-hidden="true">&raquo;</span></a>)
+          desc = (
+            <a className="page-link" href={"?pageNumber="+(pageNumber -1)}>Next <span aria-hidden="true">&raquo;</span></a>)
         }
         let key = `pageLinkTo_${pageNumber}`
         return (<li key={key}><span>{desc}</span></li>) 
