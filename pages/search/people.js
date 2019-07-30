@@ -8,45 +8,71 @@ import _ from 'lodash'
 const PersonList = ({ 
     url: { pathname, query: { search, pageNumber } }, 
     data: { loading, error, personsFacetedSearch } }) => {
-  if (error) return <h1>Error loading people.</h1>
-  if (personsFacetedSearch) {
 
-    const pages = []
-    const array =  _.range(0, parseInt(personsFacetedSearch.page.totalPages))
-
-    for (const [index, value] of array.entries()) {
-      var attr = "page-item"
-      if (value === parseInt(personsFacetedSearch.page.number)) {
-        attr = "page-item active"
-      }
-      // needs to add ?search to url too - should use some kind of parameter builder
-      pages.push(<li className={attr} key={index}><a className="page-link" href={"?pageNumber="+value}>{value+1}</a></li>)
+    let cb = (page) => {
+       console.log(`page=${page}`)
     }
+
+    if (error) return <h1>Error loading people.</h1>
+    if (personsFacetedSearch) {
 
     return (
       <App>
       <div>
-        <h2>People</h2>
-
-        <div>Query: { search }</div>
+        
+        
         <form action="/search/people" method="GET">
-          <div class="form-group">
+        
+          <h2>People</h2>
+          <div>Query: { search }</div>
+
+          <div className="form-group">
             <label for="search">Search:</label>
             <input defaultValue={ search } type="text" className="form-control" key="search" name="search" placeholder="search..." ref={ search } />
           </div>
-        </form>
+        
 
         <h3>page {personsFacetedSearch.page.number+1} of {personsFacetedSearch.page.totalPages} pages</h3>
-        <Paging page={personsFacetedSearch.page}></Paging>
-        <ul className="list-group">
-          {personsFacetedSearch.content.map((person, index) => (
-            <li className="list-group-item" key={person.id}>
-                <span className="person-name">
-                  <a href={"/person/"+person.id}>{person.name}</a>
-                </span>
-              </li>
-          ))}
-        </ul>
+        <Paging page={personsFacetedSearch.page} callback={cb}></Paging>
+        
+        <div className="row" key={`form-search-row`}>
+        
+        <div className="col-sm"> 
+          <ul className="list-group">
+            {personsFacetedSearch.content.map((person, index) => (
+              <li className="list-group-item" key={person.id}>
+                  <span className="person-name">
+                    <a href={"/person/"+person.id}>{person.name}</a>
+                  </span>
+                </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="col-sm">
+        {personsFacetedSearch.facets.map((facet, index) => (
+            <div>
+                <h3>{ facet.field }</h3>
+                <ul className="list-group" key={facet.field}>
+                    {facet.entries.content.map((e, index2) => (
+                                        
+                     <li className="list-group-item" key={`lgi-${index2}_${facet.field}`}>
+                        <input
+                          defaultChecked={!!facet.value==e.value} 
+                          type="checkbox" 
+                          name={`filters[${facet.field}]`}
+                          value={e.value} />
+                        {e.value} ({e.count})
+                     </li>
+                    ))}
+                </ul>
+            </div>
+        ))}
+        </div>
+
+        </div>{ /*end div row */}
+
+        </form>
       </div>
       </App>
     )

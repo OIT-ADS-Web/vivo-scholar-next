@@ -2,33 +2,26 @@
 import helper from '../lib/paging'
 import _ from 'lodash'
 
-/*
-    page {
-      totalPages
-      number
-      size
-      totalElements
-    }
-*/
-const PAGE_ROWS = 100 // page-by
+import Link from "next/link"
+//import { printIntrospectionSchema } from 'graphql';
 
-const PagingPanel = ({page: {totalPages, number, size, totalElements}}) => {       
-    
-    const remainder = totalPages % PAGE_ROWS
-    
-    if (remainder) {
-      totalPages +=1
-    }
 
+const PagingPanel = ({page: {totalPages, number, size, totalElements}, callback}) => {       
     if (totalPages == 0) {
       return ( <div></div> )
     }
 
+    // trying to make a way for parent components to 
+    // generate the link (with possibly more parameters - particularly search)
+    const logPage = (page) => console.debug(page)
+    let cb = callback || logPage
     // changing 0 based to 1 based
     const currentPage = number + 1
  
     const page = (pageNumber, active) => {
       let key = `pageLinkTo_${pageNumber}`
+
+      cb(pageNumber)
 
       if(active) {
         return (
@@ -54,18 +47,20 @@ const PagingPanel = ({page: {totalPages, number, size, totalElements}}) => {
     // so example might be [['+', 1][16...30]['+', 31]]
  
     let [previous, current, next] = pageMap
-    console.log(pageMap)
+    //console.log(pageMap)
     
     let flip = (x, direction) => {
       if(x[0] == '+') {
         let pageNumber = x[1]
 
-        let desc = (<span><span aria-hidden="true">&laquo;</span> Previous</span>)
+        let desc = (<a className="page-link" href={"?pageNumber="+(pageNumber -1)}>
+              <span aria-hidden="true">&laquo;</span> Previous
+            </a>)
         if (direction == 'forward') {
-          desc = (<span>Next <span aria-hidden="true">&raquo;</span></span>)
+          desc = (<a className="page-link" href={"?pageNumber="+(pageNumber -1)}>Next <span aria-hidden="true">&raquo;</span></a>)
         }
         let key = `pageLinkTo_${pageNumber}`
-        return (<li key={key}><a href="#" onClick={(e) => this.handlePage(e, pageNumber)}>{desc}</a></li>) 
+        return (<li key={key}><span>{desc}</span></li>) 
       }
     }
 

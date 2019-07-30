@@ -1,12 +1,16 @@
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import App from '../components/App'
+import Paging from '../components/Paging'
 import withData from '../lib/apollo'
 import _ from 'lodash'
 
 const PublicationList = ({ url: { pathname }, data: { loading, error, documentsPaged } }) => {
   if (error) return <h1>Error loading documents.</h1>
   if (documentsPaged) {
+    let cb = (page) => {
+        console.log(`page=${page}`)
+    }
 
     const pages = []
     const array =  _.range(0, parseInt(documentsPaged.page.totalPages))
@@ -24,9 +28,7 @@ const PublicationList = ({ url: { pathname }, data: { loading, error, documentsP
       <div>
         <h2>Publications</h2>
         <h3>page {documentsPaged.page.number+1} of {documentsPaged.page.totalPages} pages</h3>
-        <ul className="pagination">
-          { pages }
-        </ul>
+        <Paging page={documentsPaged.page} callback={cb}></Paging>
         <ul>
           {documentsPaged.content.map((pub, index) => (
             <li key={pub.id}>
